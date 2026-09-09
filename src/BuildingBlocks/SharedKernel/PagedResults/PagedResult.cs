@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 using BuildingBlocks.SharedKernel.Metadata;
 
 namespace BuildingBlocks.SharedKernel.PagedResults;
@@ -10,8 +11,8 @@ namespace BuildingBlocks.SharedKernel.PagedResults;
 /// </summary>
 /// <typeparam name="TValue">The type of item contained in the paged result.</typeparam>
 /// <typeparam name="TError">The type of error contained in the result.</typeparam>
-public partial record PagedResult<TValue, TError> : 
-    Result<IReadOnlyList<TValue>, TError>, 
+public partial record PagedResult<TValue, TError> :
+    Result<IReadOnlyList<TValue>, TError>,
     IPagedResult<TValue, TError>
     where TError : IError
 {

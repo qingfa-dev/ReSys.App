@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 using BuildingBlocks.SharedKernel.Metadata;
 
 namespace BuildingBlocks.SharedKernel.PagedResults;

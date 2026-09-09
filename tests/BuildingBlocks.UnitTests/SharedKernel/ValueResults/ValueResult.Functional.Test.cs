@@ -351,7 +351,7 @@ public class ValueResultFunctionalTest
 
     #endregion
 
-   
+
     #region MapError
 
     [Fact]

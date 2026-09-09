@@ -49,7 +49,7 @@ public interface IPagedMetadata : IMetadata
 /// </summary>
 /// <typeparam name="TValue">The type of item contained in the paged result.</typeparam>
 /// <typeparam name="TError">The type of error contained in the result.</typeparam>
-public interface IPagedResult<TValue, TError> 
+public interface IPagedResult<TValue, TError>
     : IResult<IReadOnlyList<TValue>, TError>, IMetadata
     where TError : IError
 {
