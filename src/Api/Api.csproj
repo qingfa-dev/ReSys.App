@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Modules/Modules.csproj" />
-    <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
+    <ProjectReference Include="../BuildingBlocks/BuildingBlocks.csproj" />
   </ItemGroup>
 
 </Project>
