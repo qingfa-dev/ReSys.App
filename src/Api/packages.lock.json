@@ -11,6 +11,15 @@
           "Microsoft.OpenApi": "[2.7.5, 3.0.0)"
         }
       },
+      "buildingblocks": {
+        "type": "Project"
+      },
+      "modules": {
+        "type": "Project",
+        "dependencies": {
+          "BuildingBlocks": "[1.0.0, )"
+        }
+      },
       "Microsoft.OpenApi": {
         "type": "CentralTransitive",
         "requested": "[2.9.0, )",

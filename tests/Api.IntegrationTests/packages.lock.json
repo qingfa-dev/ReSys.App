@@ -456,7 +456,17 @@
       "api": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": "[10.0.11, )"
+          "Microsoft.AspNetCore.OpenApi": "[10.0.11, )",
+          "Modules": "[1.0.0, )"
+        }
+      },
+      "buildingblocks": {
+        "type": "Project"
+      },
+      "modules": {
+        "type": "Project",
+        "dependencies": {
+          "BuildingBlocks": "[1.0.0, )"
         }
       },
       "Microsoft.AspNetCore.OpenApi": {

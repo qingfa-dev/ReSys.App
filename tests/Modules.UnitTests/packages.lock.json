@@ -204,8 +204,14 @@
           "xunit.v3.runner.common": "[4.0.0]"
         }
       },
-      "modules": {
+      "buildingblocks": {
         "type": "Project"
+      },
+      "modules": {
+        "type": "Project",
+        "dependencies": {
+          "BuildingBlocks": "[1.0.0, )"
+        }
       }
     }
   }
