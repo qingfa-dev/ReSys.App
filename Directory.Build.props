@@ -1,0 +1,213 @@
+<Project>
+
+  <!-- ============================================================
+       Common Targeting
+       ============================================================ -->
+  <PropertyGroup>
+
+    <TargetFramework Condition="'$(TargetFramework)' == ''">
+      net10.0
+    </TargetFramework>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Use stable C# language version by default.
+         Projects requiring preview features should opt in explicitly. -->
+    <!-- <LangVersion>preview</LangVersion> -->
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Build Configuration
+       ============================================================ -->
+  <PropertyGroup>
+
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+
+    <!-- Reproducible builds -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">
+      true
+    </ContinuousIntegrationBuild>
+
+    <!-- Generate reference assemblies -->
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+
+    <!-- Prevent compiler from silently using stale artifacts -->
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Code Analysis
+       ============================================================ -->
+  <PropertyGroup>
+
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+
+    <!-- Use the latest analyzer rules available from the SDK -->
+    <AnalysisLevel>latest</AnalysisLevel>
+
+    <!-- Run analyzers during build -->
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+
+    <!-- Enforce .editorconfig rules during build -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Fail builds on warnings -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Compiler Safety
+       ============================================================ -->
+  <PropertyGroup>
+
+    <!-- Fail on nullable warnings -->
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+
+    <!-- Generate deterministic documentation/reference information -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       NuGet Security Auditing
+       ============================================================ -->
+  <PropertyGroup>
+
+    <NuGetAudit>true</NuGetAudit>
+
+    <!-- Audit direct and transitive dependencies -->
+    <NuGetAuditMode>all</NuGetAuditMode>
+
+    <!-- Fail for moderate and higher vulnerabilities -->
+    <NuGetAuditLevel>moderate</NuGetAuditLevel>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Version / Assembly Metadata
+       ============================================================ -->
+  <PropertyGroup>
+
+    <Authors>ReSys Team</Authors>
+    <Company>ReSys</Company>
+    <Product>ReSys.App</Product>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/qingfa-dev/ReSys.App.git</RepositoryUrl>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       SourceLink
+       ============================================================ -->
+  <PropertyGroup>
+
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Makes source information available to debuggers -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Test Project Detection
+       ============================================================ -->
+  <PropertyGroup>
+
+    <IsTestProject Condition="'$(IsTestProject)' == '' AND
+      (
+        $(MSBuildProjectName.EndsWith('.Tests')) OR
+        $(MSBuildProjectName.EndsWith('.UnitTests')) OR
+        $(MSBuildProjectName.EndsWith('.IntegrationTests')) OR
+        $(MSBuildProjectName.EndsWith('.Specs'))
+      )">
+      true
+    </IsTestProject>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Test Project Overrides
+       ============================================================ -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+
+    <IsPackable>false</IsPackable>
+
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <!-- Test naming conventions intentionally differ -->
+    <NoWarn>
+      $(NoWarn);
+      CS1591;
+      CS1573;
+      CA1707;
+      xUnit1051;
+      CA1861
+    </NoWarn>
+
+    <!-- Parallel tests -->
+    <ParallelizeTestCollections>true</ParallelizeTestCollections>
+    <MaxParallelThreads>0</MaxParallelThreads>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Non-Test Projects
+       ============================================================ -->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+
+    <IsPackable>false</IsPackable>
+
+    <!-- Disable XML documentation requirements -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Package Lock
+       ============================================================ -->
+  <PropertyGroup>
+
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Test Coverage
+       ============================================================ -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+
+    <!-- Coverage is explicitly opt-in -->
+    <CollectCoverage Condition="'$(CollectCoverage)' == ''">
+      false
+    </CollectCoverage>
+
+    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
+
+    <CoverletOutput>
+      $(MSBuildProjectDirectory)/coverage/
+    </CoverletOutput>
+
+  </PropertyGroup>
+
+</Project>

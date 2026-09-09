@@ -1,0 +1,151 @@
+<Project>
+
+  <!-- ============================================================
+       ReSys.App - Repository Build Enforcement
+       ============================================================ -->
+
+
+  <!-- ============================================================
+       CI Build Validation
+       ============================================================ -->
+
+  <Target Name="ValidateCIConfiguration"
+          BeforeTargets="Build"
+          Condition="'$(CI)' == 'true'">
+
+    <!-- CI builds must be deterministic -->
+    <Error
+      Condition="'$(Deterministic)' != 'true'"
+      Text="CI builds must use deterministic builds." />
+
+    <!-- CI builds should use Release configuration -->
+    <Error
+      Condition="'$(Configuration)' != 'Release'"
+      Text="CI builds must use the Release configuration." />
+
+  </Target>
+
+
+  <!-- ============================================================
+       Package Lock Validation
+       ============================================================ -->
+
+  <Target Name="ValidatePackageLockFile"
+          BeforeTargets="Build"
+          Condition="'$(CI)' == 'true'">
+
+    <Error
+      Condition="'$(RestorePackagesWithLockFile)' != 'true'"
+      Text="CI builds must enable NuGet package lock files." />
+
+  </Target>
+
+
+  <!-- ============================================================
+       Prevent Accidental Packaging
+       ============================================================ -->
+
+  <Target Name="PreventUnexpectedPack"
+          BeforeTargets="Pack"
+          Condition="'$(IsPackable)' != 'true'">
+
+    <Error
+      Text="This project is not packable. Set IsPackable=true explicitly before creating a NuGet package." />
+
+  </Target>
+
+
+  <!-- ============================================================
+       Validate Release Build Settings
+       ============================================================ -->
+
+  <Target Name="ValidateReleaseConfiguration"
+          BeforeTargets="Build"
+          Condition="'$(Configuration)' == 'Release'">
+
+    <!-- Release builds should not disable optimization -->
+    <Error
+      Condition="'$(Optimize)' == 'false'"
+      Text="Release builds must not disable compiler optimizations." />
+
+    <!-- Release builds should produce deterministic output -->
+    <Error
+      Condition="'$(Deterministic)' != 'true'"
+      Text="Release builds must be deterministic." />
+
+  </Target>
+
+
+  <!-- ============================================================
+       Validate Repository Metadata
+       ============================================================ -->
+
+  <Target Name="ValidateRepositoryMetadata"
+          BeforeTargets="Build"
+          Condition="'$(CI)' == 'true' AND '$(IsTestProject)' != 'true'">
+
+    <Error
+      Condition="'$(RepositoryUrl)' == ''"
+      Text="RepositoryUrl must be configured for CI builds." />
+
+    <Error
+      Condition="'$(RepositoryType)' != 'git'"
+      Text="RepositoryType must be set to 'git'." />
+
+  </Target>
+
+
+  <!-- ============================================================
+       SourceLink Validation
+       ============================================================ -->
+
+  <Target Name="ValidateSourceLinkConfiguration"
+          BeforeTargets="Build"
+          Condition="'$(CI)' == 'true' AND '$(IsTestProject)' != 'true'">
+
+    <Error
+      Condition="'$(PublishRepositoryUrl)' != 'true'"
+      Text="PublishRepositoryUrl must be enabled for CI builds." />
+
+  </Target>
+
+
+  <!-- ============================================================
+       Build Summary
+       ============================================================ -->
+
+  <Target Name="ReSysBuildSummary"
+          AfterTargets="Build"
+          Condition="'$(CI)' == 'true'">
+
+    <Message
+      Importance="High"
+      Text="============================================================" />
+
+    <Message
+      Importance="High"
+      Text="ReSys.App build completed successfully." />
+
+    <Message
+      Importance="High"
+      Text="Configuration: $(Configuration)" />
+
+    <Message
+      Importance="High"
+      Text="Target Framework: $(TargetFramework)" />
+
+    <Message
+      Importance="High"
+      Text="Deterministic: $(Deterministic)" />
+
+    <Message
+      Importance="High"
+      Text="Test Project: $(IsTestProject)" />
+
+    <Message
+      Importance="High"
+      Text="============================================================" />
+
+  </Target>
+
+</Project>
